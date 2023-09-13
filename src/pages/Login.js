@@ -52,6 +52,7 @@ function Login () {
                     password: ""
                 })
             } else {
+                toast.dismiss(toastId.current)
                 toast.error(data.message, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 2000

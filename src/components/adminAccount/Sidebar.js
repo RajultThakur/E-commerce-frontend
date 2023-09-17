@@ -3,6 +3,7 @@ import { Link,  useNavigate } from 'react-router-dom'
 import { adminAccountPath, adminSidebarItems } from '../../constants/constants'
 import Utils from '../../utils/helper';
 import { toast, ToastContainer } from "react-toastify";
+import "./sidebar.css";
 
 export default function Sidebar () {
     const navigate = useNavigate();

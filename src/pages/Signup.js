@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import config from '../config/config';
 
 function Signup() {
   // Define state variables for form fields
@@ -22,7 +23,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/user/signup", {
+      const response = await fetch(`${config.backendEndPoint}/user/signup`, {
           method: "POST",
           headers: {
               "Content-Type": 'application/json',

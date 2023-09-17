@@ -3,6 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import Utils from '../utils/helper';
 import "react-toastify/dist/ReactToastify.css";
+import config from '../config/config';
 
 function Login () {
     const [context] = Utils();
@@ -30,7 +31,7 @@ function Login () {
             closeButton: false
         })
         try {
-            const response = await fetch("http://localhost:5000/user/signin", {
+            const response = await fetch(`${config.backendEndPoint}/user/signin`, {
                 method: "POST",
                 headers: {
                     "Content-Type": 'application/json',

@@ -3,7 +3,7 @@ import Sidebar from '../../components/adminAccount/Sidebar'
 
 export default function Category() {
   return (
-    <div>
+    <div className='flex customHeight'>
         <Sidebar/>
     </div>
   )

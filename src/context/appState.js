@@ -1,41 +1,37 @@
 import React, { useState } from 'react'
 import config from '../config/config';
+import { AUTH_TOKEN, GET_METHOD, POST_METHOD } from '../constants/constants';
 import AppContext from './appContext';
 
 function AppState (props) {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
     const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
     const [error, setError] = useState("");
+    const [cartItems, setCartItems] = useState([]);
+    const [cartItemsCount, setCartItemsCount] = useState(0);
+    const [cartPrice, setCartPrice] = useState(0);
 
-    const authenticate = async () => {
-        if (localStorage.getItem("auth-token") !== null) {
-            await getUserByToken();
+    const authenticate = () => {
+        if (AUTH_TOKEN !== null) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
         }
     }
 
-    const getUserByToken = async() => {
+    const getUserByToken = async () => {
+        const reqParams = GET_METHOD();
         try {
-            const response = await fetch(`${config.backendEndPoint}/user/token`,{
-                method: 'GET',
-                headers: {
-                  "Content-Type": 'application/json',
-                  "auth-token": localStorage.getItem("auth-token")
-                  ,
-                },
-            })
+            const response = await fetch(`${config.backendEndPoint}/user`, reqParams);
 
             const data = await response.json();
-            console.log(data);
-            
+            const { id, name, email } = data.data
+            return { id, name, email };
+
         } catch (error) {
             console.log(error.message)
-            
+
         }
 
     }
@@ -45,10 +41,9 @@ function AppState (props) {
             const response = await fetch(`${config.backendEndPoint}/product/products`);
 
             const data = await response.json();
-            setProducts(data.products);
-            setFilteredProducts(data.products)
+            setProducts(data.data);
             setError("");
-            return data.products;
+            return data.data;
         } catch (error) {
             setError(error.message);
         }
@@ -62,15 +57,15 @@ function AppState (props) {
             setError("");
             const product = data.product;
             if (formattedData) {
-                const {_id,brand, title, description, img, category, price, stock} = product;
+                const { _id, brand, title, description, img, category, price, stock } = product;
                 return {
-                    id : _id,
+                    id: _id,
                     brand,
-                    title ,
-                    description ,
-                    img ,
-                    category ,
-                    price ,
+                    title,
+                    description,
+                    img,
+                    category,
+                    price,
                     stock
                 }
             }
@@ -80,18 +75,51 @@ function AppState (props) {
         }
     }
 
+    const getCartItems = async (id) => {
+        try {
+            const response = await fetch(`${config.backendEndPoint}/cart/cartitems/${id}`);
+            const data = await response.json();
+            console.log(data)
+            setCartItemsCount(data.data.length);
+            setCartItems(data.data)
+            let price = 0;
+            for (let i = 0; i < data.data.length; i++) {
+                price = price + data.data[i].product.price * data.data[i].quantity
+                console.log(price)
+            }
+            setCartPrice(price)
+        } catch (error) {
+            return error.message
+        }
+    }
+
+    const addToCart = async (userId, productId, category) => {
+        const reqParams = POST_METHOD({ userId, productId, category });
+
+        const response = await fetch(`${config.backendEndPoint}/cart/cartorlist`, reqParams)
+
+        const data = await response.json();
+
+        console.log(data);
+
+    }
+
     return (
         <AppContext.Provider
             value={{
+                getUserByToken,
                 isAuthenticated,
                 authenticate,
                 getProducts,
                 products,
-                filteredProducts,
-                setFilteredProducts,
                 error,
                 setError,
-                getProductById
+                getProductById,
+                getCartItems,
+                addToCart,
+                cartItems,
+                cartItemsCount,
+                cartPrice
             }}>
             {props.children}
         </AppContext.Provider>

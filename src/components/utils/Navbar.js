@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Utils from "../../utils/helper";
 import SearchIcon from "@mui/icons-material/Search";
-function Navbar() {
-  const [context] = Utils();
-  const { authenticate, isAuthenticated } = context;
+function Navbar () {
+  const [context] = Utils()
+  const { authenticate, isAuthenticated, getUserByToken, getCartItems, cartItemsCount } = context;
 
   useEffect(() => {
+    async function run () {
+      const data = await getUserByToken();
+      await getCartItems(data.id);
+      authenticate();
+    }
+    run();
     authenticate();
   }, []);
 
@@ -21,7 +27,7 @@ function Navbar() {
                         bg-[#efefef]"
       >
         <div className="logo">
-          <Link to="/" className="text-2xl      font-bold">
+          <Link to="/" className="text-2xl font-bold">
             E-Commerce
           </Link>
         </div>
@@ -58,7 +64,7 @@ function Navbar() {
             to="/cart"
             className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
           >
-            Cart (10)
+            Cart ({cartItemsCount})
           </Link>
         </ul>
 

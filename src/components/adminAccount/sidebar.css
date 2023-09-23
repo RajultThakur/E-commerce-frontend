@@ -1,3 +1,11 @@
-.customHeight{
-    height: calc(100vh - 73px);
+.customHeight {
+  height: calc(100vh - 73px);
+}
+
+.productPage::-webkit-scrollbar {
+  width: 2px;
+}
+
+.productPage::-webkit-scrollbar-track {
+  background: #efefef;
 }

@@ -1,0 +1,11 @@
+.quantityBtn div {
+  border: 1px solid;
+  font-size: 20px;
+  padding-block: 2px;
+  padding-inline: 10px;
+}
+
+.quantityBtn:nth-child(2) {
+  border-left: none;
+  border-right: none;
+}

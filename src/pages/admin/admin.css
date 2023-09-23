@@ -1,11 +1,14 @@
-.addOrUpdateProduct div input, .addOrUpdateProduct div textarea, .addOrUpdateProduct div button{
-    border: 1.5px solid rgb(179 179 179);border-radius: 6px;
-    padding: 5px 8px 5px 8px ;
-    outline: none;
+.searchBox,
+.addOrUpdateProduct div input,
+.addOrUpdateProduct div textarea,
+.addOrUpdateProduct div button {
+  border: 1.5px solid rgb(179 179 179);
+  border-radius: 6px;
+  padding: 5px 8px 5px 8px;
+  outline: none;
 }
 
-.addOrUpdateProduct div button{
-    border: none;
-    padding: 6.25px 8px 6.25px 8px ;
+.addOrUpdateProduct div button {
+  border: none;
+  padding: 6.25px 8px 6.25px 8px;
 }
-

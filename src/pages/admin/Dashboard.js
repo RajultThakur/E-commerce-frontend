@@ -3,18 +3,28 @@ import Card from '../../components/adminAccount/Card'
 import Sidebar from '../../components/adminAccount/Sidebar'
 import { useNavigate } from 'react-router-dom';
 import Utils from '../../utils/helper';
+import { AUTH_TOKEN } from '../../constants/constants';
 
 export default function Admin () {
   const navigate = useNavigate();
   const [context] = Utils();
-  const { authenticate, isAuthenticated } = context
+  const { getUserByToken, setLoggedUser } = context
 
   useEffect(() => {
-    authenticate();
-    if (!isAuthenticated) {
-      navigate("/");
-      return;
+    async function run () {
+      if (AUTH_TOKEN !== null) {
+        const user = await getUserByToken();
+      } else {
+        setLoggedUser({
+          id: '',
+          name: "",
+          email: ''
+        })
+        navigate("/")
+        return;
+      }
     }
+    run();
   }, []);
   return (
     <div className='flex customHeight'>

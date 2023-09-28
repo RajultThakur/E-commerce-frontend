@@ -3,14 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import config from '../config/config';
 
-function Signup() {
+function Signup () {
   // Define state variables for form fields
   const toastId = React.useRef(null);
   const navigate = useNavigate();
   const [credential, setCredential] = useState({
-    name: 'bandar',
-    email: 'bandar@gmail.com',
-    password: '12345',
+    name: '',
+    email: '',
+    password: '',
   });
 
   // Handle form field changes
@@ -24,36 +24,36 @@ function Signup() {
     e.preventDefault();
     try {
       const response = await fetch(`${config.backendEndPoint}/user/signup`, {
-          method: "POST",
-          headers: {
-              "Content-Type": 'application/json',
-          },
-          body: JSON.stringify({ name : credential.name, email: credential.email, password: credential.password })
+        method: "POST",
+        headers: {
+          "Content-Type": 'application/json',
+        },
+        body: JSON.stringify({ name: credential.name, email: credential.email, password: credential.password })
       })
       const data = await response.json();
       toast.dismiss(toastId.current)
       if (data.success) {
-          toast.success("SignUp successfully!", {
-              position: toast.POSITION.BOTTOM_LEFT,
-              autoClose: 2000
-          })
-          navigate("/auth/login");
-          setCredential({
-              name : "",
-              email: "",
-              password: ""
-          })
+        toast.success("SignUp successfully!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+          autoClose: 2000
+        })
+        navigate("/auth/login");
+        setCredential({
+          name: "",
+          email: "",
+          password: ""
+        })
       } else {
-          toast.error(data.message, {
-              position: toast.POSITION.BOTTOM_LEFT,
-              autoClose: 2000
-          })
+        toast.error(data.message, {
+          position: toast.POSITION.BOTTOM_LEFT,
+          autoClose: 2000
+        })
       }
       console.log(data);
-  } catch (err) {
+    } catch (err) {
       toast.error('internal server issue')
       console.log(err)
-  }
+    }
   };
 
   return (
@@ -61,8 +61,8 @@ function Signup() {
     w-[100%] h-[100%] 
     flex justify-center items-center 
     mt-[100px]">
-      <ToastContainer/>
-      <form onSubmit={handleSubmit}>
+      <ToastContainer />
+      <form className='text-gray-400' onSubmit={handleSubmit}>
         <div>
           <input
             type="text"
@@ -71,17 +71,17 @@ function Signup() {
             placeholder='name'
             value={credential.name}
             onChange={handleInputChange}
-            className='text-black
+            className='text-black 
             outline-none
             border-none
             round-lg
-            bg-[#dfdfdf]
+            bg-gray-200
             px-3
             py-1
             mb-4'
           />
         </div>
-        
+
         <div>
           <input
             type="email"
@@ -94,7 +94,7 @@ function Signup() {
             outline-none
             border-none
             round-lg
-            bg-[#dfdfdf]
+            bg-gray-200
             px-3
             py-1
             mb-4'
@@ -112,13 +112,18 @@ function Signup() {
             outline-none
             border-none
             round-lg
-            bg-[#dfdfdf]
+            bg-gray-200
             px-3
             py-1
             mb-4'
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <div>
+          <button type="submit" className='bg-green-400 text-white font-medium p-1 w-[100%]'>Signup</button>
+        </div>
+        <div>
+          <h1 className='text-sm mt-1'>Already have an account. <Link className='text-blue-600 underline' to="/auth/login">Login</Link></h1>
+        </div>
       </form>
     </div>
   );

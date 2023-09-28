@@ -3,8 +3,9 @@ import Sidebar from '../../components/adminAccount/Sidebar'
 import { AUTH_TOKEN, POST_METHOD } from '../../constants/constants';
 import Utils from '../../utils/helper'
 import "./admin.css"
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import config from '../../config/config';
+import Loading from '../../components/Loading';
 
 export default function Product () {
 
@@ -20,18 +21,22 @@ export default function Product () {
     price: 0,
     stock: 0,
   });
+  const [loading, setLoading] = useState(true);
+
   const [show, setShow] = useState(false);
   const [filteredProduct, setFilteredProducts] = useState([]);
   useEffect(() => {
     async function getData () {
+      setLoading(true)
       const data = await getProducts();
       setFilteredProducts(data)
+      setLoading(false)
     }
     getData();
   }, [])
 
   const searchProducts = async (e) => {
-
+    setLoading(true)
     let searchValue = e.target.value.toLowerCase();
     if (searchValue === "") {
       const data = await getProducts();
@@ -41,6 +46,7 @@ export default function Product () {
       return title.toLowerCase().includes(searchValue);
     })
     setFilteredProducts(searchProducts)
+    setLoading(false)
   }
 
   const addProduct = async () => {
@@ -120,13 +126,12 @@ export default function Product () {
   return (
 
     <div className='flex h-[100vh]'>
-      <ToastContainer />
       <Sidebar />
       <div className='flex-1 overflow-y-scroll'>
         <div className='px-5 pt-4 pd-1'>
           <button className={`text-sm bg-gray-300 px-5 py-2 font-medium hover:bg-gray-400 rounded-[4px] ${show && "hidden"}`} onClick={() => { setShow(!show) }}>Add new product</button>
         </div>
-        {/* <div className=''> */}
+
         <div className={`addOrUpdateProduct flex gap-2 justify-between w-[100%] shadow-lg py-3 px-5 ${!show && "hidden"} transition-transform ease-in`}>
           <div className='flex flex-col gap-2'>
             <input type="text" placeholder='title' value={product.title} name="title"
@@ -166,21 +171,27 @@ export default function Product () {
             </div>
           </div>
         </div>
-        {/* </div> */}
+
+
         <div className='flex flex-col gap-3 p-5 h-[100%]'>
           <input type="text" style={{ border: "1.5px solid rgb(179 179 179)", borderRadius: "6px" }} className='p-2 outline-none shadow-lg' onChange={searchProducts} placeholder="search any product you want" />
-          {filteredProduct.length ? filteredProduct.map((product, idx) => {
-            return <div key={idx} className='flex justify-between items-center px-5 py-1 shadow-lg '>
-              <div>
-                <h1 className='text-sm font-medium'>{product.title}</h1>
-              </div>
-              <div className='flex gap-3'>
-                <button className='text-sm bg-gray-300 px-4 py-[3px] font-medium hover:bg-gray-400 rounded-[4px]' value={product._id}
-                  onClick={() => { fillDetailsInAddProductSection(product._id) }}>Edit</button>
-                <button className='text-sm bg-gray-300 px-4 py-[3px] font-medium hover:bg-gray-400 rounded-[4px]' value={product._id} onClick={() => { deleteProduct(product._id) }}>Delete</button>
-              </div>
-            </div>
-          }) : <div className=' h-[100%] text-center font-bold text-xl text-gray-400'>Not found</div>}
+          {
+            loading === true ?
+              <h1 className='w-[100%] text-center text-xl text-gray-400'>Loading...</h1>
+              :
+              filteredProduct.length ? filteredProduct.map((product, idx) => {
+                return <div key={idx} className='flex justify-between items-center px-5 py-1 shadow-lg '>
+                  <div>
+                    <h1 className='text-sm font-medium'>{product.title}</h1>
+                  </div>
+                  <div className='flex gap-3'>
+                    <button className='text-sm bg-gray-300 px-4 py-[3px] font-medium hover:bg-gray-400 rounded-[4px]' value={product._id}
+                      onClick={() => { fillDetailsInAddProductSection(product._id) }}>Edit</button>
+                    <button className='text-sm bg-gray-300 px-4 py-[3px] font-medium hover:bg-gray-400 rounded-[4px]' value={product._id} onClick={() => { deleteProduct(product._id) }}>Delete</button>
+                  </div>
+                </div>
+              }) : <div className=' h-[100%] text-center font-bold text-xl text-gray-400'>Not found</div>
+          }
         </div>
       </div>
     </div>

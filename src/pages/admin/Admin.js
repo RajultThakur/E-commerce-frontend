@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import AddAdmin from '../../components/adminAccount/AddAdmin'
-import AdminList from '../../components/adminAccount/AdminList'
 import Sidebar from '../../components/adminAccount/Sidebar'
 import Utils from '../../utils/helper'
 import "../../components/adminAccount/sidebar.css"
 import { useNavigate } from 'react-router-dom'
 import config from '../../config/config'
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { AUTH_TOKEN, POST_METHOD } from '../../constants/constants'
 
 export default function Admin () {
@@ -68,23 +66,21 @@ export default function Admin () {
         }
     }
 
-    // const 
-
     useEffect(() => {
         async function run () {
             authenticate();
-            if (AUTH_TOKEN === null) {
-                navigate("/");
-                return;
-            }
             await getAllAdminsAccount();
         }
-        run();
+        if (AUTH_TOKEN === null) {
+            navigate("/");
+            return;
+        } else {
+            run();
+        }
     }, []);
 
     return (
         <div className='flex customHeight'>
-            <ToastContainer />
             <Sidebar />
             <div className='flex-1 '>
                 <div className=' flex gap-3 flex-col p-5'>

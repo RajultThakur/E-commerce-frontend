@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import config from '../config/config';
-import { AUTH_TOKEN, GET_METHOD, POST_METHOD } from '../constants/constants';
+import { ADDED_TO_CART, ADDED_TO_CART_AND_WISHLIST, AUTH_TOKEN, GET_METHOD, POST_METHOD } from '../constants/constants';
 import AppContext from './appContext';
 
 function AppState (props) {
@@ -11,6 +11,14 @@ function AppState (props) {
     const [cartItems, setCartItems] = useState([]);
     const [cartItemsCount, setCartItemsCount] = useState(0);
     const [cartPrice, setCartPrice] = useState(0);
+    const [loggedUser, setLoggedUser] = useState({
+        id: "",
+        name: "",
+        email: "",
+        role: ""
+    })
+    const [allOrders, setAllOrders] = useState([]);
+    const [orderDetails, setOrderDetails] = useState([]);
 
     const authenticate = () => {
         if (AUTH_TOKEN !== null) {
@@ -21,13 +29,29 @@ function AppState (props) {
     }
 
     const getUserByToken = async () => {
+        if (AUTH_TOKEN === null) {
+            setLoggedUser({
+                id: '',
+                name: "",
+                email: '',
+                role: ""
+            })
+            return {
+                id: '',
+                name: "",
+                email: '',
+                role: ""
+            }
+        }
         const reqParams = GET_METHOD();
         try {
             const response = await fetch(`${config.backendEndPoint}/user`, reqParams);
 
             const data = await response.json();
-            const { id, name, email } = data.data
-            return { id, name, email };
+            console.log(data);
+            const { id, name, email, role } = data.data
+            setLoggedUser({ id, name, email, role })
+            return { id, name, email, role };
 
         } catch (error) {
             console.log(error.message)
@@ -77,15 +101,17 @@ function AppState (props) {
 
     const getCartItems = async (id) => {
         try {
-            const response = await fetch(`${config.backendEndPoint}/cart/cartitems/${id}`);
+            console.log(id)
+            const response = await fetch(`${config.backendEndPoint}/cart/cart-items/${id}`);
             const data = await response.json();
-            console.log(data)
-            setCartItemsCount(data.data.length);
-            setCartItems(data.data)
+            const onlyCartItems = data.data.filter((ele) => {
+                return (ele.category === ADDED_TO_CART || ele.category === ADDED_TO_CART_AND_WISHLIST);
+            })
+            setCartItemsCount(onlyCartItems.length);
+            setCartItems(onlyCartItems)
             let price = 0;
-            for (let i = 0; i < data.data.length; i++) {
-                price = price + data.data[i].product.price * data.data[i].quantity
-                console.log(price)
+            for (let i = 0; i < onlyCartItems.length; i++) {
+                price = price + onlyCartItems[i].product.price * onlyCartItems[i].quantity
             }
             setCartPrice(price)
         } catch (error) {
@@ -93,14 +119,38 @@ function AppState (props) {
         }
     }
 
-    const addToCart = async (userId, productId, category) => {
-        const reqParams = POST_METHOD({ userId, productId, category });
+    const addToCart = async (authorId, productId, category) => {
+        const reqParams = POST_METHOD({ authorId, productId, category });
+        console.log(reqParams)
 
         const response = await fetch(`${config.backendEndPoint}/cart/cartorlist`, reqParams)
 
         const data = await response.json();
+        return data;
 
+    }
+
+    const removeFromCart = async (id) => {
+        const response = await fetch(`${config.backendEndPoint}/cart/remove/${id}`)
+
+        const data = await response.json();
+        return data;
+
+    }
+
+    const removeAllFromCart = async () => {
+        for (let i = 0; i < cartItems.length; i++) {
+            await removeFromCart(cartItems[i]._id);
+        }
+        await getCartItems(loggedUser.id);
+    }
+
+    const getAllOrders = async (id) => {
+        console.log(id)
+        const response = await fetch(`${config.backendEndPoint}/order/orders/${id}`)
+        const data = await response.json();
         console.log(data);
+        setAllOrders(data.data);
 
     }
 
@@ -108,6 +158,8 @@ function AppState (props) {
         <AppContext.Provider
             value={{
                 getUserByToken,
+                loggedUser,
+                setLoggedUser,
                 isAuthenticated,
                 authenticate,
                 getProducts,
@@ -119,7 +171,15 @@ function AppState (props) {
                 addToCart,
                 cartItems,
                 cartItemsCount,
-                cartPrice
+                cartPrice,
+                setCartItems,
+                setCartItemsCount,
+                setCartPrice,
+                removeFromCart,
+                getAllOrders,
+                allOrders,
+                setOrderDetails,
+                removeAllFromCart
             }}>
             {props.children}
         </AppContext.Provider>

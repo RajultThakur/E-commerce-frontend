@@ -1,7 +1,9 @@
 export const adminSidebarItems = ['Dashboard', 'Product', 'Category', 'Orders', 'Admins', 'Setting']
+export const userSidebarItems = ['Dashboard', 'Orders', 'Setting']
 
-export const adminAccountPath = "/account/admin/";
-export const userAccountPath = "/account/user/";
+export let ADMIN_ACCOUNT_PATH = "/account/admin/";
+
+export const USER_ACCOUNT_PATH = "/account/user/";
 export const AUTH_TOKEN = localStorage.getItem("auth-token");
 
 export const POST_METHOD = (bodyField) => {
@@ -191,3 +193,13 @@ export const SPONSOR_PRODUCT = [
 ]
 
 export const DESCRIPTION = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi dolorem sint dolore reiciendis asperiores qui illum. Accusamus dolor deserunt perspiciatis nihil atque ratione magnam voluptatem reprehenderit optio et repudiandae aspernatur iusto asperiores illum, molestias ea quis ipsam quo. Cum ipsa sit repellat repudiandae fuga? Ipsum eveniet cupiditate praesentium laborum soluta enim voluptates sapiente inventore eaque cum numquam beatae maiores ex laboriosam quo dolore qui officia, accusantium aperiam voluptate ab! At quam, quos architecto eos officia itaque est ex dignissimos alias voluptatem nisi voluptate. Ad, explicabo ex sit illo officiis."
+
+export const ADDED_TO_CART_AND_WISHLIST = "in cart as well as wish listed"
+
+export const ADDED_TO_CART = 'added to cart'
+
+export const WISH_LISTED = 'wish listed'
+
+export const GET_RANDOM_NUMBER = (min, max) => {
+    return Math.random() * (max - min) + min;
+}

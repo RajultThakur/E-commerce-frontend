@@ -9,3 +9,18 @@
   border-left: none;
   border-right: none;
 }
+
+.checkoutDetailsPage input {
+  /* style={{ border: "1.5px solid rgb(179 179 179)", borderRadius: "6px" }} className='p-2 outline-none shadow-lg' */
+  width: 100%;
+  border: 1.5px solid rgb(179 179 179);
+  border-radius: 6px;
+  padding: 4px;
+  outline: none;
+}
+
+.details div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

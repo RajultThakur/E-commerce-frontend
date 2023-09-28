@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Utils from "../../utils/helper";
 import SearchIcon from "@mui/icons-material/Search";
+import { AUTH_TOKEN } from "../../constants/constants";
 function Navbar () {
   const [context] = Utils()
-  const { authenticate, isAuthenticated, getUserByToken, getCartItems, cartItemsCount } = context;
+  const { getUserByToken, getCartItems, cartItemsCount, setLoggedUser } = context;
+  const [path, setPath] = useState('user')
 
   useEffect(() => {
     async function run () {
-      const data = await getUserByToken();
-      await getCartItems(data.id);
-      authenticate();
+      if (AUTH_TOKEN !== null) {
+        const data = await getUserByToken();
+        // await getCartItems(data.id);
+        if (data.role == 'admin') {
+          setPath('admin')
+        }
+      } else {
+        setLoggedUser({
+          id: '',
+          name: "",
+          email: ''
+        })
+      }
     }
     run();
-    authenticate();
   }, []);
 
   return (
@@ -50,16 +61,17 @@ function Navbar () {
           >
             Category
           </Link>
-          <Link
-            to={
-              isAuthenticated === true
-                ? "/account/admin/dashboard"
-                : "/auth/login"
-            }
-            className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
-          >
-            {isAuthenticated === true ? "Account" : "Login"}
-          </Link>
+          {
+            localStorage.getItem("auth-token") !== null &&
+            <Link
+              to={`/account/${path}/dashboard`}
+              className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
+            >Account
+            </Link>
+          }
+          {
+            localStorage.getItem("auth-token") == null && <Link to="/auth/login" className="hover:text-gray-400 mx-3 font-medium text-lg list-none">Login</Link>
+          }
           <Link
             to="/cart"
             className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
@@ -72,7 +84,7 @@ function Navbar () {
           <SearchIcon />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

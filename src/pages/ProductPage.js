@@ -8,7 +8,6 @@ import { DESCRIPTION } from '../constants/constants';
 export default function ProductPage () {
     const [product, setProduct] = useState({})
     useEffect(() => {
-        console.log()
         async function run () {
             let id = window.location.pathname.substring(9);
             let response = await fetch(`${config.backendEndPoint}/product/${id}`);

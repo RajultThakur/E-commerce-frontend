@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import Utils from '../utils/helper';
 import "react-toastify/dist/ReactToastify.css";
@@ -7,12 +7,12 @@ import config from '../config/config';
 
 function Login () {
     const [context] = Utils();
-    const {authenticate, isAuthenticated} = context;
+    const { authenticate, isAuthenticated, loggedUser, setLoggedUser, getUserByToken } = context;
 
     const toastId = React.useRef(null);
     const [credential, setCredential] = useState({
-        email: "user@gmail.com",
-        password: "12345"
+        email: "",
+        password: ""
     });
     const navigate = useNavigate();
 
@@ -46,12 +46,13 @@ function Login () {
                     autoClose: 2000
                 })
                 localStorage.setItem("auth-token", data.token);
-                authenticate();
+                await getUserByToken();
                 navigate("/");
                 setCredential({
                     email: "",
                     password: ""
                 })
+                window.location.reload()
             } else {
                 toast.dismiss(toastId.current)
                 toast.error(data.message, {
@@ -69,14 +70,14 @@ function Login () {
     useEffect(() => {
         authenticate()
         console.log(isAuthenticated)
-        if (isAuthenticated) {
+        if (localStorage.getItem("auth-token") != null) {
             navigate("/")
+
         }
     }, [])
 
 
     return (<>
-        <ToastContainer />
         <div className="
         w-[100%] h-[100%] 
         flex justify-center items-center 
@@ -98,7 +99,7 @@ function Login () {
                                     outline-none
                                     border-none
                                     round-lg
-                                    bg-[#dfdfdf]
+                                    bg-gray-200
                                     px-3
                                     py-1
                                     mb-4'
@@ -114,19 +115,19 @@ function Login () {
                                     outline-none
                                     border-none
                                     round-[10px]
-                                    bg-[#dfdfdf]
+                                    bg-gray-200
                                     px-3
                                     py-1
                                     mb-4'
                     />
                 </div>
                 <div>
-                    <button type="submit">Login</button>
+                    <button type="submit" className='bg-green-400 text-white font-medium p-1 w-[100%]'>Login</button>
+                </div>
+                <div>
+                    <h1 className='text-sm mt-1'>Don't have an account. <Link className='text-blue-600 underline' to="/auth/signup">Create</Link></h1>
                 </div>
             </form>
-            <div>
-                <Link to="/auth/signup">SignUp</Link>
-            </div>
         </div>
     </>
     );

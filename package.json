@@ -50,5 +50,5 @@
   "devDependencies": {
     "tailwindcss": "^3.3.3"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "https://ecommerce-21gp.onrender.com"
 }

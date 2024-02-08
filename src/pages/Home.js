@@ -3,6 +3,7 @@ import Banner from '../components/banner/Banner'
 import { AUTH_TOKEN } from '../constants/constants';
 import Utils from '../utils/helper'
 import { PulseBubbleLoader } from "react-loaders-kit"
+import AllProduct from './AllProduct';
 const Home = () => {
   const [context] = Utils();
   const { getCartItems, getUserByToken, getAllOrders, setLoggedUser } = context;
@@ -29,6 +30,7 @@ const Home = () => {
     <div>
       <Banner />
       <PulseBubbleLoader />
+      <AllProduct hide={true}/>
     </div>
   )
 }

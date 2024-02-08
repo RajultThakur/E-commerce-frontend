@@ -60,11 +60,16 @@ function AppState (props) {
 
     }
 
-    const getProducts = async () => {
+    const getProducts = async (price="") => {
         try {
-            const response = await fetch(`${config.backendEndPoint}/product/products`);
+            let url = `${config.backendEndPoint}/product/products`
+            if(price !== ""){
+                url = `${config.backendEndPoint}/product/products?price`
+            }
+            const response = await fetch(url);
 
             const data = await response.json();
+            console.log(data)
             setProducts(data.data);
             setError("");
             return data.data;

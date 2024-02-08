@@ -6,15 +6,22 @@ import "../components/adminAccount/sidebar.css"
 import "./admin/admin.css"
 import Utils from '../utils/helper'
 import CloseIcon from '@mui/icons-material/Close';
-import Loading from '../components/Loading'
-export default function AllProduct () {
+import Prompt from '../components/Loading'
+
+export default function AllProduct ({hide=false}) {
   const [context] = Utils();
   const { getProducts, products } = context;
   const [filteredProduct, setFilteredProducts] = useState([]);
   const [filter, setFilter] = useState("")
-  const [filterType, setFilterType] = useState("Defalut");
+  const [filterType, setFilterType] = useState("Default");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const options = [
+    { value: 'price=1', label: 'Low to high' },
+    { value: 'price=-1', label: 'High to low' },
+    { value: 'rating=-1', label: 'By popularity' }
+  ]
 
   useEffect(() => {
     async function getData () {
@@ -38,8 +45,7 @@ export default function AllProduct () {
   const searchProducts = async (e) => {
     let searchValue = e.target.value.toLowerCase();
     if (searchValue === "") {
-      const data = await getProducts();
-      setFilteredProducts(data)
+      setFilteredProducts(products)
     }
     let searchProducts = products.filter(({ title }) => {
       return title.toLowerCase().includes(searchValue);
@@ -51,42 +57,49 @@ export default function AllProduct () {
     console.log('working')
   }
 
-  const handleChange = (e) => {
+  const handleChange = async(e) => {
     let value = e.target.value;
-    setFilter(value);
-    let filter_type = "Default";
-    if (value === "price=1") {
-      filter_type = "low to high"
-    } else if (value === "price=-1") {
-      filter_type = "high to low"
-    } else if (value === "rating=-1") {
-      filter_type = "by popularity"
-    }
-    setFilterType(filter_type);
-    console.log(filter)
-    console.log(filterType)
+    setLoading(true);
+    setFilterType(e.target.value)
+    await getProducts(value)
+      let filteredValue;
+      if (value === "price=1") {
+        filteredValue = products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+        console.log("first", filteredValue)
+      } else if (value === "price=-1") {
+        filteredValue = products.sort((a,b) => parseInt(b.price) - parseInt(a.price));
+        console.log("second", filteredValue)
+        
+      } else {
+        
+        filteredValue = products
+        console.log("last", filteredValue)
+      }
+      setLoading(false)
+      setFilteredProducts(filteredValue);
+      // setFilterType(filter_type);
+    // console.log(filter)
+    // console.log(filterType)
   }
 
   return (
     <div className="flex">
 
-      <div className='customHeight overflow-y-scroll productPage'>
-        {loading == true ?
-          <Loading /> :
-          <>
-            <div className='sticky gap-3 top-0 z-10 w-[100%] py-2 px-10 flex justify-center items-center bg-white mb-2'>
+      <div className={`customHeight ${!hide&&"overflow-y-scroll productPage"} w-full`}>
+
+            {!hide && <div className='sticky gap-3 top-0 z-1 w-[100%] py-2 px-10 flex justify-start sm:justify-center items-center flex-col md:flex-row bg-white mb-2'>
 
               <input type="text" className="searchBox w-[100%]"
                 onChange={searchProducts} placeholder="search any product you want"
                 name="img" />
 
-              <select className='border border-[#d4cccc] rounded-md px-2 py-[7px] outline-none' value={filterType} onChange={handleChange} >
+              <div className='flex gap-2 justify-start md:w-max w-full '>
+              <select className='border border-[#d4cccc] rounded-md px-2 py-[7px] outline-none' onChange={handleChange} value={filterType}>
                 <option value="">Default</option>
-                <option value="price=1">low to high</option>
-                <option value="price=-1">high to low</option>
-                <option value="rating=-1">by popularity</option>
+                <option value="price=1">Low to high</option>
+                <option value="price=-1">High to low</option>
+                <option value="rating=-1">By popularity</option>
               </select>
-
 
               <div className='flex items-center cursor-pointer hover:text-gray-300 text-gray-500'
                 onClick={filterBox}>
@@ -97,27 +110,31 @@ export default function AllProduct () {
 
               </div>
               <div className='flex items-center cursor-pointer hover:text-gray-300 text-gray-500'
-                onClick={() => { setShow(!show) }}><CloseIcon /></div>
-            </div>
+                onClick={() => { setShow(!show) }}><CloseIcon />
+                </div>
+              </div>
+            </div>}
 
-            <div className='flex gap-4 flex-wrap justify-evenly items-center'>
+            {loading == true ?
+              <Prompt message='Loading...'/> :
+            <div className='flex gap-4 flex-wrap justify-evenly items-center transition-all w-full'>
 
-              {filteredProduct.map(({ _id, img, title, price, rating, brand }) => {
+              {filteredProduct.length>0 ? filteredProduct.map(({ _id, img, title, price, rating, brand }) => {
                 return <ProductCard key={_id} id={_id} image={img} title={title} price={price} rating={rating} brand={brand} />
-              })
+              }):
+              <Prompt message='Not Found :('/>
               }
             </div>
-          </>
-        }
-
+            }
+        
       </div>
-      {show && <div className='customHeight flex flex-col p-1 justify-evenly'>
+      {/* {show && <div className='customHeight flex flex-col p-1 justify-evenly'>
         <h1 className='text-center text-xl font-bold text-gray-400'>Sponsor Products</h1>
 
         <SponsorProducts image={products[num1].img} title={products[num1].title} />
         <SponsorProducts image={products[num2].img} title={products[num2].title} />
-      </div>
-      }
+      </div> */}
+      {/* } */}
     </div>
   )
 }

@@ -5,8 +5,8 @@ function Banner () {
     return (
         <div className=''>
             <Link to="/product/64d22bc5511e2c508e5a2b76">
-                <div className="content absolute top-[200px] px-10">
-                    <h1 className='title text-3xl'>
+                <div className="content md:absolute md:top-[200px] flex flex-col px-10">
+                    <h1 className='title text-sm md:text-3xl'>
                         Shop special edition</h1>
                     <p className="description">Special colours available on samsung.com
                     </p>

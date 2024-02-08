@@ -4,7 +4,6 @@ import ReactStars from "react-rating-stars-component";
 import Utils from '../../utils/helper';
 import { ADDED_TO_CART, WISH_LISTED } from '../../constants/constants';
 import { toast } from 'react-toastify';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 export default function ProductCard ({ id, image, title, price, rating, brand }) {
     const [context] = Utils();
@@ -40,12 +39,12 @@ export default function ProductCard ({ id, image, title, price, rating, brand })
                     <div className='flex flex-col justify-between items-start p-3'>
 
                         <div className='text-xl font-medium text-gray-400 mb-2'>
-                            {title.length <= 25 ? title : title.substring(0, 22) + "..."}
+                            {title.length <= 23 ? title : title.substring(0, 20) + "..."}
                         </div>
                         <div>
                             <h1 className='text-md'>Price  <span className='font-medium ml-2'>₹{price}/</span></h1>
                         </div>
-                        <div className='flex gap-2 justify-around items-center'>
+                        <div className='flex gap-2 justify-between items-center w-full'>
                             <ReactStars
                                 count={5}
                                 value={rating}
@@ -54,8 +53,8 @@ export default function ProductCard ({ id, image, title, price, rating, brand })
                                 size={28}
                                 activeColor="#ffb700"
                             />
-                            <div>
-                                <h1 className='text-md italic'>powered by  <span className='font-medium italic text-gray-400 underline'>{brand}</span></h1>
+                            <div className='relative left-0'>
+                                <h1 className='text-md italic'><span className='font-medium italic text-gray-400 underline'>{brand}</span></h1>
                             </div>
                         </div>
                     </div>

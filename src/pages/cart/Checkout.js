@@ -9,8 +9,10 @@ export default function Checkout ({ total, cartItems }) {
     const tax = parseInt((total * 15) / 100);
     const [context] = Utils();
     const { removeAllFromCart } = context;
+    const orderCoutn = 0;
     const checkout = async () => {
         try {
+console.log(cartItems)
             const items = cartItems.map((item) => {
                 return {
                     name: item.product.title,
@@ -27,8 +29,8 @@ export default function Checkout ({ total, cartItems }) {
             const response = await fetch(`${config.backendEndPoint}/create-checkout-session`, reqParams);
             const data = await response.json();
             if (data.success === true) {
-                await removeAllFromCart();
-                window.location.href = data.url
+                // await removeAllFromCart();
+                // window.location.href = data.url
             }
         } catch (error) {
             console.log(error.message)

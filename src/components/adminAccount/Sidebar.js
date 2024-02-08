@@ -4,6 +4,7 @@ import { adminAccountPath, adminSidebarItems, ADMIN_ACCOUNT_PATH, AUTH_TOKEN, us
 import Utils from '../../utils/helper';
 import { toast } from "react-toastify";
 import "./sidebar.css";
+import { MoveRight, MoveLeft } from 'lucide-react';
 
 export default function Sidebar () {
   const navigate = useNavigate();
@@ -11,6 +12,19 @@ export default function Sidebar () {
   const { getUserByToken, loggedUser, setLoggedUser } = context;
   const [sidebarItems, setSidebarItems] = useState(userSidebarItems)
   const [path, setPath] = useState(USER_ACCOUNT_PATH)
+  const [show, setShow] = useState(false)
+
+  const handleChange = () => {
+    setShow(!show)
+  }
+
+  const handleChangeV2 = () => {
+    setShow((prev) => {
+      if(prev){
+        setShow(false)
+      }
+    })
+  }
 
   useEffect(() => {
     async function run () {
@@ -46,7 +60,8 @@ export default function Sidebar () {
     window.location.reload()
   };
   return (
-    <div className='flex flex-col gap-4 px-10 pr-16 bg-[#efefef] w-[190px] customHeight' >
+    <>
+    <div onClick={handleChangeV2} className={`${show ? "absolute transition-all w-max flex" : "hidden"} transition-all md:flex flex-col gap-4 px-10 pr-16 bg-[#efefef] w-[190px] customHeight`} >
       <h3 className='text-xl font-bold text-gray-400'>Hii, {loggedUser.name.toUpperCase().split(" ")[0]}</h3>
       {sidebarItems.map((item, idx) => {
         return <div key={idx}>
@@ -57,5 +72,11 @@ export default function Sidebar () {
         <button className='text-lg font-medium hover:text-gray-400 cursor-pointer' onClick={logout}>Logout</button>
       </div>
     </div>
+    
+    <div onClick={handleChange} className='md:hidden w-8 flex items-center justify-center cursor-pointer h-8 rounded-full'>
+    {!show ? <MoveRight /> : <MoveLeft/>}
+    </div>
+    
+    </>
   )
 }

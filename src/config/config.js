@@ -1,5 +1,5 @@
 const config = {
-    backendEndPoint : "https://ecommerce-21gp.onrender.com",
+    backendEndPoint : "http://localhost:5000",
 }
 
 export default config;

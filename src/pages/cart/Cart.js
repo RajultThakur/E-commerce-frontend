@@ -33,9 +33,9 @@ export default function Cart () {
     }, [])
 
     return (
-        <div className='flex gap-2 customHeight'>
+        <div className='flex items-center flex-col md:flex-row gap-2 customHeight'>
             {loggedIn == false ? <NotLoggedIn /> : loading == true ? <Loading /> : cartItems.length != 0 ? <>
-                <div className='flex-1 p-5 overflow-y-scroll productPage '>
+                <div className='flex-1 p-5 md:overflow-y-scroll productPage  '>
 
                     {cartItems.map((ele) => {
                         return (

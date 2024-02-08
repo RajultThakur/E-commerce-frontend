@@ -3,10 +3,23 @@ import { Link } from "react-router-dom";
 import Utils from "../../utils/helper";
 import SearchIcon from "@mui/icons-material/Search";
 import { AUTH_TOKEN } from "../../constants/constants";
+import { Menu, X } from 'lucide-react';
 function Navbar () {
   const [context] = Utils()
   const { getUserByToken, getCartItems, cartItemsCount, setLoggedUser } = context;
+  const [show, setShow] = useState(false)
   const [path, setPath] = useState('user')
+
+  const handleChange = () => {
+    setShow(!show)
+  }
+  const handleChangeV2 = () => {
+    setShow((prev) => {
+      if(show){
+        setShow(false)
+      }
+    })
+  }
 
   useEffect(() => {
     async function run () {
@@ -30,19 +43,16 @@ function Navbar () {
   return (
     <div>
       <div
-        className="flex
-                        justify-between
-                        items-center
-                        px-10
-                        py-5
-                        bg-[#efefef]"
+        className="justify-between items-center px-10 py-5 bg-[#efefef] flex"
+
       >
         <div className="logo">
           <Link to="/" className="text-2xl font-bold">
             E-Commerce
           </Link>
         </div>
-        <ul className="flex md:max-sm:flex-shrink">
+        <ul onClick={handleChangeV2} className={`z-10
+         md:flex flex-shrink ${show ? "bg-[#efefef] shadow-xl transition-all absolute right-10 top-[80px] flex-col w-40 gap-2 p-2 flex " : "hidden"}`}>
           <Link
             to="/"
             className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
@@ -53,7 +63,7 @@ function Navbar () {
             to="/products"
             className="hover:text-gray-400 mx-3 font-medium text-lg list-none"
           >
-            All Products
+            Products
           </Link>
           <Link
             to="/category"
@@ -80,9 +90,16 @@ function Navbar () {
           </Link>
         </ul>
 
-        <div className="search">
+        <div className="search hidden md:block">
           <SearchIcon />
         </div>
+
+        <div onClick={handleChange} className="search cursor-pointer flex md:hidden ">
+          {
+            show ? <X /> : <Menu />
+          }
+        </div>
+
       </div>
     </div >
   );

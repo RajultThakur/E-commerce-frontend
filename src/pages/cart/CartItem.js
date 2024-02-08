@@ -38,7 +38,7 @@ export default function CartItem ({ product, id, quantity }) {
 
     return (
 
-        <div className='flex items-center justify-around'>
+        <div className='flex flex-col md:flex-row items-center justify-around'>
             <div className='w-[130px] h-[150px]'>
                 <img className='object-contain w-[100%] h-[100%]' src={img} alt="" />
             </div>

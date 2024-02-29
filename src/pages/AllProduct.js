@@ -89,9 +89,7 @@ export default function AllProduct ({hide=false}) {
                 <option value="rating=-1">By popularity</option>
               </select>
 
-              <div className='flex items-center cursor-pointer hover:text-gray-300 text-gray-500'
-                onClick={filterBox}>
-
+              <div className='flex items-center cursor-pointer hover:text-gray-300 text-gray-500'>
                 <span className="material-icons">
                   tune
                 </span>

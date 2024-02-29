@@ -49,10 +49,8 @@ function Signup () {
           autoClose: 2000
         })
       }
-      console.log(data);
     } catch (err) {
       toast.error('internal server issue')
-      console.log(err)
     }
   };
 

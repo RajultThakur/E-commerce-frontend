@@ -12,7 +12,6 @@ export default function Checkout ({ total, cartItems }) {
     const orderCoutn = 0;
     const checkout = async () => {
         try {
-console.log(cartItems)
             const items = cartItems.map((item) => {
                 return {
                     name: item.product.title,

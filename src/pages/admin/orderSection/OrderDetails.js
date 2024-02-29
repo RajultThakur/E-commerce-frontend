@@ -14,7 +14,6 @@ export default function OrderDetails () {
         //     console.log(ele._id)
         //     return ele._id == orderId;
         // })
-        console.log(orderDetails)
         // setOrderDetails(data);
     }, [])
     return (

@@ -12,7 +12,6 @@ const Home = () => {
     async function run () {
       if (AUTH_TOKEN !== null) {
         const user = await getUserByToken();
-        console.log(user)
         await getAllOrders(user.id);
         await getCartItems(user.id);
       } else {

@@ -86,7 +86,7 @@ export default function Admin () {
                 <div className=' flex gap-3 flex-col p-5'>
                     <h1 className='text-2xl font-medium'>Add new admin</h1>
                     <div className='flex gap-2'>
-                        <input style={{ border: "1.5px solid rgb(179 179 179)", borderRadius: "6px" }} className='p-2 flex-1 outline-none shadow-lg text-lg' type="text" value={email} onChange={(e) => { setEmail(e.target.value); console.log(email) }} />
+                        <input style={{ border: "1.5px solid rgb(179 179 179)", borderRadius: "6px" }} className='p-2 flex-1 outline-none shadow-lg text-lg' type="text" value={email} onChange={(e) => { setEmail(e.target.value) }} />
                         <button className='text-lg bg-gray-300 px-4 font-medium hover:bg-gray-400 rounded-[4px]'
                             onClick={() => { removeFormAdmin(email, 'admin') }}>Add admin</button>
                     </div>

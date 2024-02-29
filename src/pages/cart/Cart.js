@@ -19,7 +19,6 @@ export default function Cart () {
             setLoading(true)
             const user = await getUserByToken();
             await getCartItems(user.id);
-            console.log(cartItems)
             setLoading(false)
 
         }

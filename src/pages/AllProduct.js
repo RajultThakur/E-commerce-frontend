@@ -24,20 +24,20 @@ export default function AllProduct ({hide=false}) {
   ]
 
   useEffect(() => {
-    async function getData () {
+    // async function getData () {
       setLoading(true);
-      const data = await getProducts();
-      if (data == undefined) {
+      // const data = await getProducts();
+      if (products == undefined) {
         setLoading(false);
         return <div>
           <h1>Internal server error!</h1>
         </div>
       }
-      setFilteredProducts(data)
+      setFilteredProducts(products)
       setLoading(false);
-    }
-    getData();
-  }, [])
+    // }
+    // getData();
+  }, [products])
 
   let num1 = Math.floor(GET_RANDOM_NUMBER(0, products.length))
   let num2 = Math.floor(GET_RANDOM_NUMBER(0, products.length))
@@ -53,10 +53,6 @@ export default function AllProduct ({hide=false}) {
     setFilteredProducts(searchProducts)
   }
 
-  const filterBox = () => {
-    console.log('working')
-  }
-
   const handleChange = async(e) => {
     let value = e.target.value;
     setLoading(true);
@@ -65,21 +61,13 @@ export default function AllProduct ({hide=false}) {
       let filteredValue;
       if (value === "price=1") {
         filteredValue = products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
-        console.log("first", filteredValue)
       } else if (value === "price=-1") {
         filteredValue = products.sort((a,b) => parseInt(b.price) - parseInt(a.price));
-        console.log("second", filteredValue)
-        
       } else {
-        
         filteredValue = products
-        console.log("last", filteredValue)
       }
       setLoading(false)
       setFilteredProducts(filteredValue);
-      // setFilterType(filter_type);
-    // console.log(filter)
-    // console.log(filterType)
   }
 
   return (

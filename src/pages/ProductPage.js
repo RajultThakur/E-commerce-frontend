@@ -20,7 +20,6 @@ export default function ProductPage () {
 
     const checkout = async (products) => {
         try {
-            console.log(products)
             const items = products.map((item) => {
                 return {
                     name: item.title,
@@ -32,7 +31,6 @@ export default function ProductPage () {
                     userEmail: ""
                 }
             })
-            console.log(items);
             const reqParams = POST_METHOD({ items, shippingInfo: 'indore' })
 
             const response = await fetch(`${config.backendEndPoint}/create-checkout-session`, reqParams);
@@ -66,7 +64,6 @@ export default function ProductPage () {
             let id = window.location.pathname.substring(9);
             let response = await fetch(`${config.backendEndPoint}/product/${id}`);
             let data = await response.json();
-            console.log(data);
             setProduct(data.product)
         }
         run()

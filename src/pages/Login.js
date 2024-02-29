@@ -60,7 +60,6 @@ function Login () {
                     autoClose: 2000
                 })
             }
-            console.log(data);
         } catch (err) {
             toast.error('internal server issue')
             console.log(err)
@@ -69,7 +68,6 @@ function Login () {
 
     useEffect(() => {
         authenticate()
-        console.log(isAuthenticated)
         if (localStorage.getItem("auth-token") != null) {
             navigate("/")
 

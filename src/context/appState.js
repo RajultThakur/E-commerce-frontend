@@ -48,14 +48,12 @@ function AppState (props) {
             const response = await fetch(`${config.backendEndPoint}/user`, reqParams);
 
             const data = await response.json();
-            console.log(data);
             const { id, name, email, role } = data.data
             setLoggedUser({ id, name, email, role })
             return { id, name, email, role };
 
         } catch (error) {
             console.log(error.message)
-
         }
 
     }
@@ -69,7 +67,6 @@ function AppState (props) {
             const response = await fetch(url);
 
             const data = await response.json();
-            console.log(data)
             setProducts(data.data);
             setError("");
             return data.data;
@@ -77,6 +74,10 @@ function AppState (props) {
             setError(error.message);
         }
     }
+
+    useState(async() => {
+        await getProducts();
+    },[products]);
 
     const getProductById = async (id, formattedData = false) => {
         try {
@@ -106,7 +107,6 @@ function AppState (props) {
 
     const getCartItems = async (id) => {
         try {
-            console.log(id)
             const response = await fetch(`${config.backendEndPoint}/cart/cart-items/${id}`);
             const data = await response.json();
             const onlyCartItems = data.data.filter((ele) => {
@@ -126,8 +126,6 @@ function AppState (props) {
 
     const addToCart = async (authorId, productId, category) => {
         const reqParams = POST_METHOD({ authorId, productId, category });
-        console.log(reqParams)
-
         const response = await fetch(`${config.backendEndPoint}/cart/cartorlist`, reqParams)
 
         const data = await response.json();
@@ -151,10 +149,8 @@ function AppState (props) {
     }
 
     const getAllOrders = async (id) => {
-        console.log(id)
         const response = await fetch(`${config.backendEndPoint}/order/orders/${id}`)
         const data = await response.json();
-        console.log(data);
         setAllOrders(data.data);
 
     }

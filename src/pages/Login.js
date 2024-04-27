@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
-import Utils from '../utils/helper';
 import "react-toastify/dist/ReactToastify.css";
 import config from '../config/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLoggedInUser } from "../store/authSlice"
 
 function Login () {
-    const [context] = Utils();
-    const { authenticate, isAuthenticated, loggedUser, setLoggedUser, getUserByToken } = context;
 
     const toastId = React.useRef(null);
     const [credential, setCredential] = useState({
         email: "",
         password: ""
     });
+    const dispatch = useDispatch()
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -46,13 +46,12 @@ function Login () {
                     autoClose: 2000
                 })
                 localStorage.setItem("auth-token", data.token);
-                await getUserByToken();
+                dispatch(fetchLoggedInUser())
                 navigate("/");
                 setCredential({
                     email: "",
                     password: ""
                 })
-                window.location.reload()
             } else {
                 toast.dismiss(toastId.current)
                 toast.error(data.message, {
@@ -67,10 +66,9 @@ function Login () {
     }
 
     useEffect(() => {
-        authenticate()
         if (localStorage.getItem("auth-token") != null) {
-            navigate("/")
-
+            navigate("/");
+            return;
         }
     }, [])
 

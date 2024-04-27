@@ -18,37 +18,51 @@ import Cart from './pages/cart/Cart';
 import CheckoutSuccess from './components/checkout/CheckoutSuccess';
 import { ToastContainer } from 'react-toastify';
 import OrderDetails from './pages/admin/orderSection/OrderDetails';
-
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLoggedInUser, login } from './store/authSlice';
+import { fetchProducts } from './store/productSlice';
+import NotFound from './components/utils/NotFound';
 
 function App () {
-
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth)
+  useEffect(() => {
+    dispatch(fetchProducts())
+    if (localStorage.getItem("auth-token") != null) {
+      dispatch(fetchLoggedInUser());
+    }
+  }, [])
   return (
     <AppState>
       <ToastContainer />
       <Router>
         <Navbar />
         <Routes>
+          <Route exact path='*' element={<NotFound heading="please try to login or may be this page does not exist :(" subHeading="" />} />
           <Route exact path='/' element={<Home />} />
           <Route exact path='/auth/signup' element={<Signup />} />
           <Route exact path='/auth/login' element={<Login />} />
           <Route exact path='/product/:id' element={<ProductPage />} />
           <Route exact path='/products' element={<AllProduct />} />
           <Route exact path='/cart' element={<Cart />} />
-          <Route exact path='/order/success' element={<CheckoutSuccess />} />
-
-          <Route exact path='/account/admin/Dashboard' element={<Dashboard />} />
-          <Route exact path='/account/user/Dashboard' element={<UserDashboard />} />
-          <Route exact path='/account/admin/product' element={<Product />} />
-          <Route exact path='/account/admin/category' element={<Category />} />
-          <Route exact path='/account/admin/orders' element={<Order />} />
-          <Route exact path='/account/user/orders' element={<Order />} />
-          <Route exact path='/account/admin/order/details/:id' element={<OrderDetails />} />
-          <Route exact path='/account/admin/admins' element={<Admin />} />
-          <Route exact path='/account/admin/setting' element={<Setting />} />
+          {user.user &&
+            <>
+              <Route exact path='/order/success' element={<CheckoutSuccess />} />
+              <Route exact path='/account/admin/Dashboard' element={<Dashboard />} />
+              <Route exact path='/account/user/Dashboard' element={<UserDashboard />} />
+              <Route exact path='/account/admin/product' element={<Product />} />
+              <Route exact path='/account/admin/category' element={<Category />} />
+              <Route exact path='/account/admin/orders' element={<Order />} />
+              <Route exact path='/account/user/orders' element={<Order />} />
+              <Route exact path='/account/admin/order/details/:id' element={<OrderDetails />} />
+              <Route exact path='/account/admin/admins' element={<Admin />} />
+              <Route exact path='/account/admin/setting' element={<Setting />} />
+            </>
+          }
         </Routes>
       </Router>
     </AppState>
   );
 }
-
 export default App;

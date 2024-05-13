@@ -34,12 +34,12 @@ export default function ProductCard ({ id, image, title, price, rating, brand })
             <div>
                 <Link to={`/product/${id}`}>
                     <div className='w-[300px] h-[170px] flex items-center bg-white'>
-                        <img className='object-contain h-[100%] w-[100%]' src={image} alt="not found" />
+                        <img className='object-contain h-[100%] w-[100%]' src={image[0]} alt="not found" />
                     </div>
                     <div className='flex flex-col justify-between items-start p-3'>
 
                         <div className='text-xl font-medium text-gray-400 mb-2'>
-                            {title.length <= 23 ? title : title.substring(0, 20) + "..."}
+                            {title.length <= 23 ? title : title.substring(0, 23) + "..."}
                         </div>
                         <div>
                             <h1 className='text-md'>Price  <span className='font-medium ml-2'>₹{price}/</span></h1>
@@ -54,7 +54,7 @@ export default function ProductCard ({ id, image, title, price, rating, brand })
                                 activeColor="#ffb700"
                             />
                             <div className='relative left-0'>
-                                <h1 className='text-md italic'><span className='font-medium italic text-gray-400 underline'>{brand}</span></h1>
+                                <h1 className='text-md italic'><span className='font-medium italic text-gray-400 underline'>{brand.substring(0,17)}</span></h1>
                             </div>
                         </div>
                     </div>

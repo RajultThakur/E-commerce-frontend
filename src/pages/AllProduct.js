@@ -5,7 +5,6 @@ import "./admin/admin.css"
 import CloseIcon from '@mui/icons-material/Close';
 import Prompt from '../components/Loading'
 import { useSelector } from "react-redux"
-import { useFetchCartProduct } from '../hooks/useFetchCartProducts';
 export default function AllProduct ({ hide = false }) {
   const { products, isLoading, isError } = useSelector((state) => state.products)
   // const { cartProducts} = useSelector((state) => state.products)const user = useSelector((state) => state.auth)

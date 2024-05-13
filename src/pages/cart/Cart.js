@@ -9,7 +9,6 @@ import NotLoggedIn from '../../components/error/NotLoggedIn';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/utils/NotFound';
 import { useSelector } from 'react-redux';
-import { useFetchCartProduct } from '../../hooks/useFetchCartProducts';
 export default function Cart () {
     const [context] = Utils();
     const { cartPrice, loggedUser, getCartItems, getUserByToken } = context;

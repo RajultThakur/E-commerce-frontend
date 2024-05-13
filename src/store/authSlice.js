@@ -7,7 +7,6 @@ export const fetchLoggedInUser = createAsyncThunk("fetchLoggedInUser", async () 
   const url = `${config.backendEndPoint}/user`
   const response = await fetch(url, reqParams);
   const data = await response.json();
-  console.log(data)
   return data.data;
 })
 

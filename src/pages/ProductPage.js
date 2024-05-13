@@ -6,8 +6,10 @@ import ReactStars from "react-rating-stars-component";
 import { ADDED_TO_CART, DESCRIPTION, POST_METHOD } from '../constants/constants';
 import Utils from '../utils/helper';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 export default function ProductPage () {
+    const {user} = useSelector(state => state.auth)
     const [product, setProduct] = useState({});
     const [context] = Utils();
     const {
@@ -16,7 +18,6 @@ export default function ProductPage () {
         cartItemsCount,
         setCartItemsCount,
     } = context;
-
 
     const checkout = async (products) => {
         try {
@@ -27,7 +28,7 @@ export default function ProductPage () {
                     price: item.price,
                     productId: item._id,
                     quantity: 1,
-                    userID: loggedUser.id,
+                    userID: user.id,
                     userEmail: ""
                 }
             })
@@ -99,9 +100,9 @@ export default function ProductPage () {
                 </div>
                 <div className='flex justify-between items-center  pb-3 gap-2'>
                     <button className='bg-gray-200 outline-none rounded-md w-[50%] py-[6px] font-medium px-4 hover:bg-gray-300'
-                    onClick={() => { itemAddToCart(loggedUser.id, product._id, ADDED_TO_CART) }}>Add to cart</button>
+                        onClick={() => { itemAddToCart(loggedUser.id, product._id, ADDED_TO_CART) }}>Add to cart</button>
                     <button className='bg-red-400 outline-none rounded-md w-[50%] py-[6px] font-medium px-4 hover:bg-red-400 text-white'
-                    onClick={()=>{checkout([product])}}
+                        onClick={() => { checkout([product]) }}
                     >Buy now</button>
                 </div>
             </div>

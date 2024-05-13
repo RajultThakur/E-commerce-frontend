@@ -10,7 +10,6 @@ const initialState = {
 export const fetchCartProducts = createAsyncThunk("fetchCartProducts", async (userId) => {
     const response = await fetch(`${config.backendEndPoint}/cart/cart-items/${userId}`);
     const {data} = await response.json();
-    console.log(data);
     return data;
 })
 

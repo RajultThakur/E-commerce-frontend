@@ -8,11 +8,9 @@ const initialState = {
 }
 
 export const fetchProducts = createAsyncThunk("fetchProducts", async (price="") => {
-    console.log(price)
     let url = `${config.backendEndPoint}/product/products`
     const response = await fetch(url)
     const data = await response.json();
-    // console.log(data)
     return data.data;
 })
 

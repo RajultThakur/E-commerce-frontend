@@ -1,3 +1,5 @@
+import config from "../config/config";
+
 export const adminSidebarItems = ['Dashboard', 'Product', 'Category', 'Orders', 'Admins', 'Setting']
 export const userSidebarItems = ['Dashboard', 'Orders', 'Setting']
 
@@ -33,6 +35,20 @@ export const DELETE_WITHOUT_BODY = () => {
         headers: {
             "auth-token": AUTH_TOKEN
         },
+    }
+}
+
+export const getUserDetailsByTokenAndSetToStore = async() => {
+    const reqParams = GET_METHOD();
+    try {
+        const response = await fetch(`${config.backendEndPoint}/user`, reqParams);
+
+        const data = await response.json();
+        const { id, name, email, role } = data.data;
+        return {id, name, email,role}
+        
+    } catch (error) {
+        console.log(error.message)
     }
 }
 

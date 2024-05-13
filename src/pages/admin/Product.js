@@ -5,7 +5,6 @@ import Utils from '../../utils/helper'
 import "./admin.css"
 import { toast } from 'react-toastify';
 import config from '../../config/config';
-import Loading from '../../components/Loading';
 
 export default function Product () {
 

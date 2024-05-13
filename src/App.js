@@ -18,21 +18,31 @@ import Cart from './pages/cart/Cart';
 import CheckoutSuccess from './components/checkout/CheckoutSuccess';
 import { ToastContainer } from 'react-toastify';
 import OrderDetails from './pages/admin/orderSection/OrderDetails';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLoggedInUser, login } from './store/authSlice';
+import { fetchLoggedInUser } from './store/authSlice';
 import { fetchProducts } from './store/productSlice';
 import NotFound from './components/utils/NotFound';
+import { fetchCartProducts } from './store/cartSlice';
 
 function App () {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth)
-  useEffect(() => {
+
+  useMemo(() => {
     dispatch(fetchProducts())
-    if (localStorage.getItem("auth-token") != null) {
-      dispatch(fetchLoggedInUser());
-    }
+  },[])
+
+  useEffect(() => {
+    if (localStorage.getItem("auth-token") == null) return;
+    dispatch(fetchLoggedInUser());
   }, [])
+
+  useEffect(() => {
+    if(user?.user == null) return;
+    dispatch(fetchCartProducts(user?.user.id))
+  },[user?.user])
+
   return (
     <AppState>
       <ToastContainer />
